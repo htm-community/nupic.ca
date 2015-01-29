@@ -10,7 +10,7 @@ with open("swarm_description.tmpl", "r") as swarm_desc_tmpl:
   for i in xrange(BITS):
     incl_fields.append(dict(
       fieldName="bit_%i" % i,
-      fieldType="int"
+      fieldType="string"
     ))
   swarm_desc = swarm_desc.replace("<INCLUDED_FIELDS>", str(incl_fields))
   swarm_desc = swarm_desc.replace("<PREDICTED_FIELD>", "bit_%i" % midpoint)
@@ -25,7 +25,7 @@ with open("swarm_input.csv", "w") as input_file:
   flags = []
   for i in xrange(BITS):
     names.append("bit_%i" % i)
-    types.append("int")
+    types.append("string")
     flags.append("")
   writer.writerow(names)
   writer.writerow(types)
@@ -34,7 +34,7 @@ with open("swarm_input.csv", "w") as input_file:
 
   automaton = automatatron.Engine(30)
   def stream_handler(row, _):
-    writer.writerow([int(v) for v in row])
+    writer.writerow(row)
 
 
   automaton.run(iterations=BITS)
