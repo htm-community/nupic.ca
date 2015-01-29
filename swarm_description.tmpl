@@ -1,0 +1,26 @@
+SWARM_DESCRIPTION = {
+  "includedFields": <INCLUDED_FIELDS>,
+  "streamDef": {
+    "info": "cellular_automaton_rule_30",
+    "version": 1,
+    "streams": [
+      {
+        "info": "Cellular Automaton input",
+        "source": "file://swarm_input.csv",
+        "columns": [
+          "*"
+        ]
+      }
+    ]
+  },
+
+  "inferenceType": "TemporalMultiStep",
+  "inferenceArgs": {
+    "predictionSteps": [
+      1
+    ],
+    "predictedField": "<PREDICTED_FIELD>"
+  },
+  "iterationCount": -1,
+  "swarmSize": "small"
+}
