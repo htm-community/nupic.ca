@@ -1,6 +1,5 @@
 .idea/
 nupicca/data/*.py
 nupicca/data/*.csv
-nupicca/model_params/*.py
 *.pyc
 swarm/
