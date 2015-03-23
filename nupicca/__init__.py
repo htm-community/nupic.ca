@@ -36,9 +36,7 @@ def file_exists_in_dir(filename, directory):
   this_dir = os.path.dirname(os.path.realpath(__file__))
   data_dir = os.path.join(this_dir, directory)
   expected_file = os.path.join(data_dir, filename)
-  print expected_file
   exists = os.path.exists(expected_file)
-  print exists
   return exists
 
 

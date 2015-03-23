@@ -30,7 +30,7 @@ from nupicca import (requires_swarm_input, requires_swarm,
 DEFAULT_RULE = 30
 
 parser = OptionParser(
-  usage="%prog <path/to/wav> [options]\n\nConvert wav file into NuPIC input."
+  usage="%prog [options]\n\nPredict Elementary Cellular Automata with NuPIC."
 )
 
 parser.add_option(
@@ -38,7 +38,7 @@ parser.add_option(
   "--rule_number",
   dest="rule_number",
   default=DEFAULT_RULE,
-  help="Which elementary cellular automata rule to run.")
+  help="Which elementary cellular automaton rule to run.")
 parser.add_option(
   "-c",
   "--clean",
@@ -67,14 +67,13 @@ if __name__ == "__main__":
     clean_temp_files()
     exit()
   
-  if requires_swarm_input(rule_number):
-    print "No input data found for Rule #%s!" % rule_number
-    print "Creating swarm input for Rule #%s..." % rule_number
-    create_swarm_input(rule_number)
-
   if requires_swarm(rule_number):
     print "No model params found for Rule #%s!" % rule_number
     print "Running swarm for Rule #%s..." % rule_number
+    if requires_swarm_input(rule_number):
+      print "No input data found for Rule #%s!" % rule_number
+      print "Creating swarm input for Rule #%s..." % rule_number
+      create_swarm_input(rule_number)
     run_swarm(rule_number)
   
   run_model(rule_number)
