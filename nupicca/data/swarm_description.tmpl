@@ -1,12 +1,12 @@
 SWARM_DESCRIPTION = {
   "includedFields": <INCLUDED_FIELDS>,
   "streamDef": {
-    "info": "cellular_automaton_rule_30",
+    "info": "cellular_automaton_rule_<RULE_NUMBER>",
     "version": 1,
     "streams": [
       {
         "info": "Cellular Automaton input",
-        "source": "file://swarm_input.csv",
+        "source": "file://<SOURCE_FILE>",
         "columns": [
           "*"
         ]
@@ -21,6 +21,6 @@ SWARM_DESCRIPTION = {
     ],
     "predictedField": "<PREDICTED_FIELD>"
   },
-  "iterationCount": -1,
+  "iterationCount": 2000,
   "swarmSize": "medium"
 }

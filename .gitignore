@@ -1,6 +1,6 @@
 .idea/
-model_params/swarm_input_model_params.py
-swarm_input.csv
+nupicca/data/*.py
+nupicca/data/*.csv
+nupicca/model_params/*.py
 *.pyc
 swarm/
-swarm_description.py

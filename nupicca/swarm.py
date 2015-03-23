@@ -19,6 +19,7 @@
 #
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
+import imp
 import os
 import pprint
 
@@ -27,7 +28,6 @@ import logging
 logging.basicConfig()
 
 from nupic.swarming import permutations_runner
-from swarm_description import SWARM_DESCRIPTION
 
 INPUT_FILE = "swarm_input.csv"
 
@@ -38,13 +38,10 @@ def modelParamsToString(modelParams):
 
 
 
-def writeModelParamsToFile(modelParams, name):
-  cleanName = name.replace(" ", "_").replace("-", "_")
-  paramsName = "%s_model_params.py" % cleanName
-  outDir = os.path.join(os.getcwd(), 'model_params')
-  if not os.path.isdir(outDir):
-    os.mkdir(outDir)
-  outPath = os.path.join(os.getcwd(), 'model_params', paramsName)
+def writeModelParamsToFile(modelParams, rule_number):
+  this_dir = os.path.dirname(os.path.realpath(__file__))
+  paramsName = "rule_%s_model_params.py" % rule_number
+  outPath = os.path.join(this_dir, 'model_params', paramsName)
   with open(outPath, "wb") as outFile:
     modelParamsString = modelParamsToString(modelParams)
     outFile.write("MODEL_PARAMS = \\\n%s" % modelParamsString)
@@ -52,8 +49,8 @@ def writeModelParamsToFile(modelParams, name):
 
 
 
-def swarmForBestModelParams(swarmConfig, name, maxWorkers=4):
-  outputLabel = name
+def swarmForBestModelParams(swarmConfig, rule_number, maxWorkers=4):
+  outputLabel = rule_number
   permWorkDir = os.path.abspath('swarm')
   if not os.path.exists(permWorkDir):
     os.mkdir(permWorkDir)
@@ -65,7 +62,7 @@ def swarmForBestModelParams(swarmConfig, name, maxWorkers=4):
     permWorkDir=permWorkDir,
     verbosity=0
   )
-  modelParamsFile = writeModelParamsToFile(modelParams, name)
+  modelParamsFile = writeModelParamsToFile(modelParams, rule_number)
   return modelParamsFile
 
 
@@ -80,17 +77,16 @@ def printSwarmSizeWarning(size):
 
 
 
-def swarm(filePath):
-  name = os.path.splitext(os.path.basename(filePath))[0]
+def run_swarm(rule_number):
+  this_dir = os.path.dirname(os.path.realpath(__file__))
+  swarm_desc_path = os.path.join(this_dir, "data/swarm_description_%s.py" % rule_number)
+  SWARM_DESCRIPTION = imp.load_source("SWARM_DESCRIPTION", swarm_desc_path).SWARM_DESCRIPTION
+  model_params_path = os.path.join(this_dir, "model_params", "swarm_input_%s_model_params.py" % rule_number)
+  name = os.path.splitext(os.path.basename(model_params_path))[0]
   print "================================================="
   print "= Swarming on %s data..." % name
   printSwarmSizeWarning(SWARM_DESCRIPTION["swarmSize"])
   print "================================================="
-  modelParams = swarmForBestModelParams(SWARM_DESCRIPTION, name, maxWorkers=7)
+  modelParams = swarmForBestModelParams(SWARM_DESCRIPTION, rule_number, maxWorkers=7)
   print "\nWrote the following model param files:"
   print "\t%s" % modelParams
-
-
-
-if __name__ == "__main__":
-  swarm(INPUT_FILE)
